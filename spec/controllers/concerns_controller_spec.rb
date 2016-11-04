@@ -22,6 +22,9 @@ describe ConcernsController do
   end
 
   it "replaces a placeholder doc specified in concern with a real path" do
+    # This spec fails due to the failure of the api! dsl method.
+    # See the controller for the replacement line (without api!)
+    # that works.
     path = Apipie["concern_resources#index"].apis.first.path
     expect(path).to eq('/api/concerns')
 

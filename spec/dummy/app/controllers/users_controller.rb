@@ -272,6 +272,10 @@ class UsersController < ApplicationController
     render :text => 'document from file action'
   end
 
+  # Spec spec/controllers/users_controller_spec.rb:396
+  # fails due to use of api!. The spec would get further and almost pass
+  # if it was replaced with the following.
+  # api :POST, "/api/users/create_route", "Create user"
   api! 'Create user using create_route'
   param_group :user
   param :user, Hash do

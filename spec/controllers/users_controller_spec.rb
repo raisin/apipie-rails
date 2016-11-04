@@ -389,6 +389,10 @@ describe UsersController do
     context "Using routes.rb" do
       it "should contain basic info about method" do
         a = Apipie[UsersController, :create_route]
+        # the spec below fails due to the fact that the api!
+        # dsl syntax is used. This portion of the dsl does not
+        # seem to be currently compatible with Rails 5.x.x.x
+        # routing.
         expect(a.apis.count).to eq(1)
         expect(a.formats).to eq(['json'])
         api = a.apis.first

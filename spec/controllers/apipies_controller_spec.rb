@@ -42,6 +42,7 @@ describe Apipie::ApipiesController do
     end
 
     it "returns not_found on wrong method" do
+      # This spec fails because a get url parameter cannot be named method.
       get :index, :version => "2.0", :resource => "architectures", :method => "wrong_method"
 
       assert_response :not_found
@@ -225,6 +226,8 @@ describe Apipie::ApipiesController do
       expect(response.body).to eq("apidoc.json cache")
       get :index, :version => 'v1', :format => "html", :resource => "resource"
       expect(response.body).to eq("resource.html cache")
+      # get parameters cannot have the name method. Rails was built in such a way that this is a
+      # reserved keyword. As a result, this get request fails.
       get :index, :version => 'v1', :format => "html", :resource => "resource", :method => "method"
       expect(response.body).to eq("method.html cache")
     end
