@@ -255,6 +255,7 @@ describe UsersController do
           end
 
           it "should allow nil when allow_nil is set to true" do
+            request.headers['CONTENT_TYPE'] = 'application/json'
             post :create,
                  :user => {
                    :name => "root",
@@ -385,7 +386,7 @@ describe UsersController do
       expect(b.full_description.length).to be > 400
     end
 
-    context "Usign routes.rb" do
+    context "Using routes.rb" do
       it "should contain basic info about method" do
         a = Apipie[UsersController, :create_route]
         expect(a.apis.count).to eq(1)
@@ -694,6 +695,7 @@ EOS2
     end
 
     it "process correctly the parameters" do
+      request.headers['CONTENT_TYPE'] = 'application/json'
       post :create, {:user => {:name => 'dummy', :pass => 'dummy', :membership => 'standard'}, :facts => nil}
 
       expect(assigns(:api_params).with_indifferent_access).to eq({:user => {:name=>"dummy", :pass=>"dummy", :membership=>"standard"}, :facts => nil}.with_indifferent_access)

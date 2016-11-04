@@ -1,5 +1,4 @@
 Dummy::Application.routes.draw do
-
   scope ENV['RAILS_RELATIVE_URL_ROOT'] || '/' do
 
     scope '/api' do
@@ -10,13 +9,12 @@ Dummy::Application.routes.draw do
       end
       resources :concerns, :only => [:index, :show]
       namespace :files do
-        get '/*file_path', to: :download, format: false
+        get '/*file_path' => 'files#download', format: false
       end
       resources :twitter_example do
         collection do
           get :lookup
           get 'profile_image/:screen_name' => 'twitter_example#profile_image'
-          get :search
           get :search
           get :contributors
         end

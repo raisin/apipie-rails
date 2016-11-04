@@ -150,7 +150,17 @@ module Apipie
         end
 
         def process_with_api_recording(*args) # action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
-          ret = process_without_api_recording(*args)
+          if (Rails::VERSION::STRING >= "5.0") && args.length > 1 && (args[1].is_a? Hash) && args[1][:method].present?
+            transformed_args = [args[0], args[1][:method], args[1].except(:method)]
+            if args.length > 2
+              args[2..-1].each do |argument|
+                transformed_args << argument
+              end
+            end
+          else
+            transformed_args = args
+          end
+          ret = process_without_api_recording(*transformed_args)
           if Apipie.configuration.record
             Apipie::Extractor.call_recorder.analyze_functional_test(self)
             Apipie::Extractor.call_finished

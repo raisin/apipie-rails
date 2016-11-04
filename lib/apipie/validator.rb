@@ -137,7 +137,17 @@ module Apipie
     class EnumValidator < BaseValidator
       def initialize(param_description, argument)
         super(param_description)
-        @array = argument
+        array_arguments = argument.map do |element|
+           case element
+           when true
+             'true'
+           when false
+             'false'
+           else
+             element
+           end
+        end
+        @array = array_arguments
       end
 
       def validate(value)
@@ -302,14 +312,19 @@ module Apipie
       end
 
       def validate(value)
-        return false if !value.is_a? Hash
+        if (Rails::VERSION::STRING >= "5.0") && (value.is_a? ActionController::Parameters)
+          transformed_value = value.to_unsafe_hash
+        else
+          transformed_value = value
+        end
+        return false if !transformed_value.is_a? Hash
         if @hash_params
           @hash_params.each do |k, p|
             if Apipie.configuration.validate_presence?
-              raise ParamMissing.new(p) if p.required && !value.has_key?(k)
+              raise ParamMissing.new(p) if p.required && !transformed_value.has_key?(k)
             end
             if Apipie.configuration.validate_value?
-              p.validate(value[k]) if value.has_key?(k)
+              p.validate(transformed_value[k]) if transformed_value.has_key?(k)
             end
           end
         end

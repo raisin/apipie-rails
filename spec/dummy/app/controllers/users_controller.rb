@@ -266,14 +266,13 @@ class UsersController < ApplicationController
     render :text => 'This is very similar to create action'
   end
 
-
   api :GET, '/users/desc_from_file', 'desc from file'
   document 'users/desc_from_file.md'
   def desc_from_file
     render :text => 'document from file action'
   end
 
-  api! 'Create user'
+  api! 'Create user using create_route'
   param_group :user
   param :user, Hash do
     param :permalink, String
